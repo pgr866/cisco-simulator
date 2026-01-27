@@ -1,76 +1,154 @@
-# PRIS2-Test
+# Cisco Network Security - Simulador de Examen
 
-## Descripción
-PRIS2-Test es una aplicación web desarrollada con Flask que permite a los estudiantes practicar preguntas tipo test para la asignatura de PRIS 2. La aplicación ofrece dos modos de estudio para adaptarse a diferentes necesidades de preparación.
+Simulador de preguntas tipo test para la certificación Cisco Network Security. Soporta tres tipos de preguntas: selección única, múltiple y arrastrar (matching).
 
-## Características principales
-### Dos modos de estudio:
+## 🚀 Características
+
+### Tres modos de estudio:
+
 - **Simulacro de Examen**: 40 preguntas seleccionadas aleatoriamente
 - **Responde a Todas las Preguntas**: Practica con el pool completo de preguntas
 
-### Funcionalidades avanzadas:
-- Preguntas y opciones presentadas en orden aleatorio en cada intento
-- Feedback visual inmediato al responder (colores para respuestas correctas/incorrectas)
-- Contador de respuestas correctas e incorrectas
-- Barra de progreso visual
-- Sistema de puntuación con nota final (escala 0-10)
-- Las respuestas incorrectas restan 0.5 puntos de una correcta
+### Tipos de preguntas:
 
-## Temas cubiertos
-El banco de preguntas incluye temas como:
-- Metodologías de Desarrollo de Software
-- Calidad del Software
-- Métricas de calidad
-- Refactorización de Código
-- Patrones de Diseño
-- Desarrollo Basado en Pruebas (TDD)
-- Documentación de Software
-- Contenerización de Aplicaciones
-- Integración Continua y Despliegue Continuo
-- Aspectos Legales y Éticos
-- Securización de aplicaciones web
-- Ingeniería Inversa
-- Vibe Coding y programación asistida por IA
-- Legacy Code
-- Protocolo Modelo-Contexto (MCP)
+1. **Radio (selección única)**: Elige una opción correcta
+2. **Checkbox (múltiples opciones)**: Selecciona todas las opciones correctas
+3. **Matching (arrastrar)**: Relaciona conceptos con definiciones
 
-## Instalación
-1. Clona este repositorio:
-   ```
-   git clone https://github.com/yourusername/PRIS2-Test.git
-   cd PRIS2-Test
-   ```
-2. Crea un entorno virtual e instala las dependencias:
-   ```
-   python -m venv venv
-   source venv/bin/activate  # En Windows: venv\Scripts\activate
-   pip install -r requirements.txt
-   ```
-3. Ejecuta la aplicación:
-   ```
-   python app.py
-   ```
-4. Abre tu navegador y visita: http://127.0.0.1:5000/
+### Funcionalidades:
 
-## Uso
-1. En la página principal, selecciona el modo de estudio que prefieras:
-   - **Simulacro de Examen**: 40 preguntas aleatorias
-   - **Responde a Todas las Preguntas**: Todas las preguntas disponibles
-2. Responde a las preguntas seleccionando una opción.
-3. Recibirás feedback inmediato sobre tu respuesta, mostrando la opción correcta si has fallado.
-4. Al final del cuestionario, verás tu puntuación total calculada según la fórmula:
-   - Puntuación = (Aciertos - (Fallos * 0.5)) / Total Preguntas * 10
+- ✅ Interfaz responsiva y moderna
+- ✅ Imágenes en preguntas
+- ✅ Feedback visual inmediato
+- ✅ Barra de progreso
+- ✅ Sistema de puntuación (0-10) sin castigos
+- ✅ Explicaciones para cada pregunta
+- ✅ Interfaz intuitiva con drag & drop
 
-## Estructura del proyecto
+## 📋 Estructura del Proyecto
+
 ```
-PRIS2-Test/
-├── app.py               # Aplicación Flask principal
-├── questions.py         # Base de datos de preguntas
-├── requirements.txt     # Dependencias del proyecto
+cisco-simulator/
+├── app.py                  # Aplicación Flask principal
+├── questions.py            # Base de datos de preguntas
+├── requirements.txt        # Dependencias
 ├── static/
-│   ├── script.js        # Lógica del cliente
-│   └── style.css        # Estilos CSS
+│   ├── style.css          # Estilos CSS
+│   ├── script.js          # Lógica del cliente
+│   └── images/            # Imágenes para preguntas
 └── templates/
-    ├── index.html       # Página de inicio/selección de modo
-    └── quiz.html        # Interfaz del cuestionario
+    ├── index.html         # Página de inicio
+    └── quiz.html          # Interfaz del cuestionario
 ```
+
+## 🛠️ Instalación y Ejecución
+
+### 1. Instalar dependencias
+
+```bash
+pip install -r requirements.txt
+```
+
+### 2. Ejecutar la aplicación
+
+```bash
+python app.py
+```
+
+### 3. Abrir en el navegador
+
+```
+http://127.0.0.1:5000/
+```
+
+## 📝 Estructura de Preguntas
+
+### Pregunta de Radio (una selección):
+
+```python
+{
+    "id": 1,
+    "type": "radio",
+    "question": "¿Cuál es el propósito principal de un firewall?",
+    "image": None,
+    "options": [
+        "Opción 1",
+        "Opción 2",
+        "Opción 3",
+        "Opción 4"
+    ],
+    "correct": [1],  # Índice de la opción correcta
+    "explanation": "Explicación..."
+}
+```
+
+### Pregunta de Checkbox (múltiples opciones):
+
+```python
+{
+    "id": 3,
+    "type": "checkbox",
+    "question": "¿Cuáles son correctas? (Selecciona todas)",
+    "image": None,
+    "options": ["Opción 1", "Opción 2", "Opción 3"],
+    "correct": [0, 2],  # Índices de opciones correctas
+    "explanation": "Explicación..."
+}
+```
+
+### Pregunta de Matching (arrastrar):
+
+```python
+{
+    "id": 5,
+    "type": "matching",
+    "question": "Relaciona cada concepto con su definición",
+    "image": None,
+    "left_items": ["HTTP", "HTTPS", "SSH"],
+    "right_items": ["80", "443", "22"],
+    "correct": [0, 1, 2],  # Mapeo correcto
+    "explanation": "Explicación..."
+}
+```
+
+## 🖼️ Agregar Imágenes
+
+1. Coloca la imagen en `static/images/`
+2. En la pregunta, usa:
+
+```python
+"image": "/static/images/router.png"
+```
+
+## 📊 Sistema de Puntuación
+
+```
+Puntuación = (Correctas / Total) * 10
+```
+
+**Nota:** Las respuestas incorrectas NO restan puntos.
+
+## 🎨 Personalización
+
+### Cambiar colores y estilos
+
+Edita `static/style.css` para personalizar la interfaz.
+
+### Agregar/Modificar preguntas
+
+Edita `questions.py` y agrega nuevas preguntas en la lista.
+
+## 🔧 Tecnologías
+
+- **Flask** - Backend web
+- **Python** - Lógica del servidor
+- **HTML/CSS/JavaScript** - Frontend
+- **Jinja2** - Motor de plantillas
+
+## 📄 Licencia
+
+MIT - Libre para usar y modificar
+
+## 👨‍💻 Autor
+
+Simulador desarrollado para estudiantes de Cisco Network Security
