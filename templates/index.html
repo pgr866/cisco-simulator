@@ -3,29 +3,189 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>PRIS2 Tests</title>
+    <title>Cisco Network Security - Simulador de Examen</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <style>
+        .header {
+            text-align: center;
+            margin-bottom: 2rem;
+        }
+        .header h1 {
+            color: #2c3e50;
+            font-size: 2.5rem;
+            margin-bottom: 0.5rem;
+        }
+        .header p {
+            color: #7f8c8d;
+            font-size: 1.1rem;
+        }
+        .mode-selection {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 1.5rem;
+            margin-top: 2rem;
+        }
+        .mode-btn {
+            padding: 2rem;
+            border: none;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-align: left;
+            background: white;
+            border: 2px solid #e0e0e0;
+        }
+        .mode-btn:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
+        }
+        .mode-btn h2 {
+            margin: 0 0 0.5rem 0;
+            font-size: 1.3rem;
+        }
+        .mode-btn p {
+            margin: 0;
+            color: #666;
+            font-size: 0.9rem;
+            line-height: 1.4;
+        }
+        .mode-btn.practice {
+            border-color: #3498db;
+            background: linear-gradient(135deg, rgba(52, 152, 219, 0.05) 0%, rgba(52, 152, 219, 0.1) 100%);
+        }
+        .mode-btn.practice:hover {
+            border-color: #2980b9;
+        }
+        .mode-btn.practice h2 {
+            color: #2980b9;
+        }
+        .mode-btn.real {
+            border-color: #e74c3c;
+            background: linear-gradient(135deg, rgba(231, 76, 60, 0.05) 0%, rgba(231, 76, 60, 0.1) 100%);
+        }
+        .mode-btn.real:hover {
+            border-color: #c0392b;
+        }
+        .mode-btn.real h2 {
+            color: #c0392b;
+        }
+        .mode-btn.combined {
+            border-color: #f39c12;
+            background: linear-gradient(135deg, rgba(243, 156, 18, 0.05) 0%, rgba(243, 156, 18, 0.1) 100%);
+        }
+        .mode-btn.combined:hover {
+            border-color: #d68910;
+        }
+        .mode-btn.combined h2 {
+            color: #d68910;
+        }
+        .mode-btn.failed {
+            border-color: #9b59b6;
+            background: linear-gradient(135deg, rgba(155, 89, 182, 0.05) 0%, rgba(155, 89, 182, 0.1) 100%);
+        }
+        .mode-btn.failed:hover {
+            border-color: #8e44ad;
+        }
+        .mode-btn.failed h2 {
+            color: #8e44ad;
+        }
+        .badge {
+            display: inline-block;
+            background: #ecf0f1;
+            color: #34495e;
+            padding: 0.3rem 0.6rem;
+            border-radius: 3px;
+            font-size: 0.8rem;
+            margin-left: 0.5rem;
+            font-weight: bold;
+        }
+        .practice .badge {
+            background: rgba(52, 152, 219, 0.2);
+            color: #2980b9;
+        }
+        .real .badge {
+            background: rgba(231, 76, 60, 0.2);
+            color: #c0392b;
+        }
+        .combined .badge {
+            background: rgba(243, 156, 18, 0.2);
+            color: #d68910;
+        }
+        .failed .badge {
+            background: rgba(155, 89, 182, 0.2);
+            color: #8e44ad;
+        }
+        .info {
+            background: #ecf0f1;
+            padding: 1rem;
+            border-radius: 5px;
+            margin-top: 2rem;
+            font-size: 0.95rem;
+            color: #34495e;
+        }
+        @media (max-width: 768px) {
+            .mode-selection {
+                grid-template-columns: 1fr;
+            }
+            .header h1 {
+                font-size: 1.8rem;
+            }
+        }
+    </style>
 </head>
 <body>
     <div class="container">
         <div class="quiz-container">
-            <h1>Cuestionarios de PRIS2</h1>
-            <p>Selecciona el modo de cuestionario:</p>
+            <div class="header">
+                <h1>🔒 Cisco Network Security</h1>
+                <p>Simulador de Examen de Certificación</p>
+            </div>
+            
+            <p style="text-align: center; margin-bottom: 1.5rem;">Selecciona el modo de examen:</p>
             
             <form action="{{ url_for('start_quiz') }}" method="post">
                 <div class="mode-selection">
-                    <button type="submit" name="mode" value="40" class="btn mode-btn">
-                        <h2>Simulacro de Examen</h2>
-                        <p>Responde a un cuestionario aleatorio de 40 preguntas</p>
+                    <!-- EXAMEN DE PRÁCTICA -->
+                    <button type="submit" name="mode" value="practice" class="mode-btn practice">
+                        <h2>📚 Examen de Práctica <span class="badge">64</span></h2>
+                        <p>Practica con 64 preguntas seleccionadas aleatoriamente. Ideal para familiarizarse con el formato.</p>
                     </button>
                     
-                    <button type="submit" name="mode" value="all" class="btn mode-btn">
-                        <h2>Responde a Todas las Preguntas</h2>
-                        <p>Practica todas las preguntas disponibles del test</p>
+                    <!-- EXAMEN REAL -->
+                    <button type="submit" name="mode" value="real" class="mode-btn real">
+                        <h2>🎯 Examen Real <span class="badge">153</span></h2>
+                        <p>Simula el examen de certificación oficial con 153 preguntas.</p>
+                    </button>
+                    
+                    <!-- EXAMEN COMBINADO -->
+                    <button type="submit" name="mode" value="combined" class="mode-btn combined">
+                        <h2>⚡ Examen Combinado <span class="badge">217</span></h2>
+                        <p>Combina todas las preguntas (Práctica + Real). Máximo desafío.</p>
+                    </button>
+                    
+                    <!-- REPASAR ERRORES -->
+                    <button type="submit" name="mode" value="failed" class="mode-btn failed" id="failed-btn" {% if failed_count == 0 %}disabled style="opacity: 0.5; cursor: not-allowed;"{% endif %}>
+                        <h2>🔄 Repasar Errores <span class="badge" id="failed-count">{{ failed_count }}</span></h2>
+                        <p>Revisa las preguntas que fallaste. Se eliminan al acertarlas.</p>
                     </button>
                 </div>
             </form>
+            
+            <div class="info">
+                <strong>💡 Consejos:</strong>
+                <ul style="margin: 0.5rem 0; padding-left: 1.5rem;">
+                    <li>Comienza con el <strong>Examen de Práctica</strong> para familiarizarte</li>
+                    <li>Las respuestas incorrectas se guardan automáticamente</li>
+                    <li>En "Repasar Errores" se eliminan al acertarlas</li>
+                    <li>Puntuación: (Correctas / Total) × 10</li>
+                </ul>
+            </div>
         </div>
     </div>
+
+    <script>
+        // El contador de preguntas fallidas se carga desde el servidor (Jinja2)
+        // No se necesita JavaScript adicional ya que {{ failed_count }} viene del backend
+    </script>
 </body>
 </html>
