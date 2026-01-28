@@ -1,13 +1,11 @@
-# Banco de preguntas Cisco Network Security
-# Archivo único consolidado con metadatos
+# Banco de preguntas Cisco Network Security - PRÁCTICA
 
-questions_all = [  # Todas las preguntas con metadatos
+questions_practice = [
     {
         "id": 1,
         "type": "radio",
-        "exam_type": ["practice", "real"],
         "question": "¿Cuál es el propósito principal de un firewall en la seguridad de red?",
-        "image": None,
+        "image": "/static/images/prueba.jpg",
         "options": [
             "Aumentar la velocidad de la red",
             "Filtrar y controlar el tráfico de red basándose en reglas de seguridad",
@@ -20,9 +18,8 @@ questions_all = [  # Todas las preguntas con metadatos
     {
         "id": 2,
         "type": "radio",
-        "exam_type": ["practice", "real"],
         "question": "¿Qué protocolo se utiliza para establecer conexiones seguras en web?",
-        "image": None,
+        "image": "/static/images/prueba.jpg",
         "options": ["HTTP", "FTP", "HTTPS", "SMTP"],
         "correct": [2],
         "explanation": "HTTPS (HTTP Secure) es el protocolo utilizado para establecer conexiones seguras en la web, utilizando SSL/TLS para encriptar los datos."
@@ -30,9 +27,8 @@ questions_all = [  # Todas las preguntas con metadatos
     {
         "id": 3,
         "type": "checkbox",
-        "exam_type": ["practice", "real"],
         "question": "¿Cuáles de las siguientes son capas del modelo OSI? (Selecciona todas las correctas)",
-        "image": None,
+        "image": "/static/images/prueba.jpg",
         "options": [
             "Capa de Aplicación",
             "Capa de Presentación",
@@ -46,9 +42,8 @@ questions_all = [  # Todas las preguntas con metadatos
     {
         "id": 4,
         "type": "checkbox",
-        "exam_type": ["practice", "real"],
         "question": "¿Cuáles son medidas efectivas de seguridad en Cisco? (Selecciona todas las correctas)",
-        "image": None,
+        "image": "/static/images/prueba.jpg",
         "options": [
             "Configurar contraseñas fuertes",
             "Deshabilitar servicios innecesarios",
@@ -61,9 +56,8 @@ questions_all = [  # Todas las preguntas con metadatos
     {
         "id": 5,
         "type": "matching",
-        "exam_type": ["practice", "real"],
         "question": "Relaciona cada protocolo con su puerto por defecto",
-        "image": None,
+        "image": "/static/images/prueba.jpg",
         "left_items": ["HTTP", "HTTPS", "SSH", "Telnet", "DNS"],
         "right_items": ["80", "443", "22", "23", "53"],
         "correct": [0, 1, 2, 3, 4],
@@ -72,9 +66,8 @@ questions_all = [  # Todas las preguntas con metadatos
     {
         "id": 6,
         "type": "matching",
-        "exam_type": ["practice", "real"],
         "question": "Relaciona cada concepto de seguridad con su definición",
-        "image": None,
+        "image": "/static/images/prueba.jpg",
         "left_items": ["Firewall", "VPN", "IDS", "SSL/TLS"],
         "right_items": [
             "Red Privada Virtual para conexiones seguras",
@@ -88,9 +81,8 @@ questions_all = [  # Todas las preguntas con metadatos
     {
         "id": 7,
         "type": "radio",
-        "exam_type": ["practice", "real"],
         "question": "¿Qué es una ACL (Access Control List) en Cisco?",
-        "image": None,
+        "image": "/static/images/prueba.jpg",
         "options": [
             "Una lista de aplicaciones permitidas",
             "Un conjunto de reglas que permiten o deniegan tráfico de red",
@@ -103,9 +95,8 @@ questions_all = [  # Todas las preguntas con metadatos
     {
         "id": 8,
         "type": "radio",
-        "exam_type": ["practice", "real"],
         "question": "¿Cuál es la principal diferencia entre VPN y Proxy?",
-        "image": None,
+        "image": "/static/images/prueba.jpg",
         "options": [
             "VPN solo funciona en Windows",
             "VPN encripta todo el tráfico, Proxy solo redirige",
@@ -118,9 +109,8 @@ questions_all = [  # Todas las preguntas con metadatos
     {
         "id": 9,
         "type": "radio",
-        "exam_type": ["practice", "real"],
         "question": "¿Cuál es el rango de direcciones IP privadas en la Clase A?",
-        "image": None,
+        "image": "/static/images/prueba.jpg",
         "options": [
             "10.0.0.0 a 10.255.255.255",
             "172.16.0.0 a 172.31.255.255",
@@ -133,9 +123,8 @@ questions_all = [  # Todas las preguntas con metadatos
     {
         "id": 10,
         "type": "radio",
-        "exam_type": ["practice", "real"],
         "question": "¿Qué es IDS en seguridad de redes?",
-        "image": None,
+        "image": "/static/images/prueba.jpg",
         "options": [
             "Internet Data Service",
             "Intrusion Detection System",
@@ -146,16 +135,3 @@ questions_all = [  # Todas las preguntas con metadatos
         "explanation": "IDS (Intrusion Detection System) es un sistema que monitorea el tráfico de red para detectar actividades maliciosas."
     }
 ]
-
-# Funciones para filtrar preguntas
-def get_questions_by_mode(mode):
-    """Retorna preguntas según el modo seleccionado"""
-    return [q for q in questions_all if mode in q.get('exam_type', [])]
-
-# Crear alias para compatibilidad con app.py
-questions_practice = get_questions_by_mode('practice')
-questions_real = get_questions_by_mode('real')
-
-print(f"Preguntas PRÁCTICA cargadas: {len(questions_practice)}")
-print(f"Preguntas REAL cargadas: {len(questions_real)}")
-print(f"Total de preguntas únicas: {len(questions_all)}")

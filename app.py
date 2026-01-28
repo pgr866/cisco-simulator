@@ -1,5 +1,6 @@
 from flask import Flask, render_template, request, session, redirect, url_for, jsonify
-from questions import questions_practice, questions_real
+from questions_practice import questions_practice
+from questions_real import questions_real
 import random
 
 print(f"Preguntas de PRUEBA cargadas: {len(questions_practice)}")
