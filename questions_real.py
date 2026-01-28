@@ -488,18 +488,18 @@ questions_real = [
         "question": "Match the network monitoring technology with the description.",
         "image": None,
         "left_items": [
+            "IDS",
+            "RSPAN",
+            "TAP",
+            "IPS"
+        ],
+        "right_items": [
             "passively monitors network traffic",
             "uses VLANs to monitor traffic on remote switches",
             "a passive traffic splitting device implemented inline between a device of interest and the network",
             "can perform a packet drop to stop the trigger packets"
         ],
-        "right_items": [
-            "RSPAN",
-            "IDS",
-            "IPS",
-            "TAP"
-        ],
-        "correct": [1, 0, 3, 2],
+        "correct": [0, 1, 2, 3],
         "explanation": "Place the options in the following order:\n- passively monitors network traffic: IDS\n- uses VLANs to monitor traffic on remote switches: RSPAN\n- a passive traffic splitting device implemented inline between a device of interest and the network: TAP\n- can perform a packet drop to stop the trigger packets: IPS"
     },
     {
@@ -1708,7 +1708,7 @@ questions_real = [
             "Return traffic to be permitted through the firewall in the opposite direction.",
             "The firewall will automatically allow HTTP, HTTPS, and FTP traffic from g0/0 to s0/0/0, but will not track the state of connections. A corresponding policy must be applied to allow return traffic to be permitted through the firewall in the opposite direction."
         ],
-        "correct": [5],
+        "correct": [3],
         "explanation": "The pass action allows traffic but does not track the state of connections. Because the policy uses 'pass' instead of 'inspect', return traffic is not automatically allowed and a corresponding policy must be applied in the opposite direction."
     },
     {
