@@ -145,41 +145,54 @@ def get_question():
         options = question_data["options"].copy()
         correct_indices = question_data["correct"]
         
-        if question_type == "radio":
-            # For radio, shuffle options
-            option_pairs = [(options[i], i in correct_indices) for i in range(len(options))]
-            random.shuffle(option_pairs)
-            
-            shuffled_options = [pair[0] for pair in option_pairs]
-            new_correct_index = next(i for i, pair in enumerate(option_pairs) if pair[1])
-            
-            # Guardar como lista para consistencia
-            session[f'correct_idx_{current_idx}'] = [new_correct_index]
-            response_data["options"] = shuffled_options
-        else:
-            # For checkbox, keep order but store correct indices
-            session[f'correct_idx_{current_idx}'] = correct_indices
-            response_data["options"] = options
-            response_data["num_correct"] = len(correct_indices)  # Número de respuestas correctas
+        # Para ambos tipos (radio y checkbox), aleatorizar opciones
+        # Crear pares de (opción, índice_original)
+        option_pairs = [(options[i], i) for i in range(len(options))]
+        random.shuffle(option_pairs)
+        
+        shuffled_options = [pair[0] for pair in option_pairs]
+        # Mapear los índices correctos originales a los nuevos índices
+        original_to_new = {pair[1]: new_idx for new_idx, pair in enumerate(option_pairs)}
+        new_correct_indices = [original_to_new[orig_idx] for orig_idx in correct_indices]
+        
+        session[f'correct_idx_{current_idx}'] = new_correct_indices
+        response_data["options"] = shuffled_options
+        
+        if question_type == "checkbox":
+            response_data["num_correct"] = len(correct_indices)
     
     elif question_type == "matching":
-        # For matching, shuffle right items
-        left_items = question_data["left_items"]
+        # Para matching, aleatorizar tanto left_items como right_items
+        left_items = question_data["left_items"].copy()
         right_items = question_data["right_items"].copy()
         correct_mapping = question_data["correct"]
         
-        # Create shuffled right items with mapping
-        shuffled_pairs = list(enumerate(right_items))
-        random.shuffle(shuffled_pairs)
+        # Aleatorizar left_items manteniendo el mapeo correcto
+        left_pairs = list(enumerate(left_items))  # (índice_original, item)
+        random.shuffle(left_pairs)
         
-        shuffled_indices = [pair[0] for pair in shuffled_pairs]
-        shuffled_right_items = [pair[1] for pair in shuffled_pairs]
+        shuffled_left_indices = [pair[0] for pair in left_pairs]
+        shuffled_left_items = [pair[1] for pair in left_pairs]
         
-        # Adjust correct mapping for shuffled indices
-        adjusted_correct = [shuffled_indices.index(correct_mapping[i]) for i in range(len(correct_mapping))]
+        # Aleatorizar right_items
+        right_pairs = list(enumerate(right_items))
+        random.shuffle(right_pairs)
+        
+        shuffled_right_indices = [pair[0] for pair in right_pairs]
+        shuffled_right_items = [pair[1] for pair in right_pairs]
+        
+        # Ajustar el mapeo correcto para los índices aleatorizados
+        # Para cada posición nueva en left (0, 1, 2...), encontrar qué right_item debe corresponder
+        adjusted_correct = []
+        for new_left_idx in range(len(shuffled_left_indices)):
+            original_left_idx = shuffled_left_indices[new_left_idx]
+            original_right_idx = correct_mapping[original_left_idx]
+            # Encontrar dónde quedó ese right_item en la lista aleatorizada
+            new_right_idx = shuffled_right_indices.index(original_right_idx)
+            adjusted_correct.append(new_right_idx)
         
         session[f'correct_idx_{current_idx}'] = adjusted_correct
-        response_data["left_items"] = left_items
+        response_data["left_items"] = shuffled_left_items
         response_data["right_items"] = shuffled_right_items
     
     session.modified = True
