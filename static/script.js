@@ -7,6 +7,20 @@ let currentQuestion = null;
 let userAnswer = null;
 let selectedLeftIndex = null;
 
+// Colores para matching (evitando azul que está en uso para selección)
+const matchingColors = [
+    '#4CAF50', // Verde
+    '#9C27B0', // Morado
+    '#F44336', // Rojo
+    '#009688', // Teal
+    '#FF9800', // Naranja
+    '#8BC34A', // Verde claro
+    '#00BCD4', // Cyan
+    '#607D8B', // Gris azulado
+    '#E91E63', // Rosa
+    '#795548' // Marrón
+];
+
 // Inicializar
 function initQuiz() {
     fetch('/quiz_info')
@@ -84,18 +98,18 @@ function renderQuestion(question) {
 
 function renderRadio(question, container) {
     const div = document.createElement('div');
-    div.className = 'radio-option';
+    div.className = 'checkbox-group'; // Usar mismo contenedor que checkbox
     question.options.forEach((option, index) => {
         const label = document.createElement('label');
-        label.style.display = 'block';
-        label.style.marginBottom = '0.5rem';
-        label.style.cursor = 'pointer';
+        label.className = 'checkbox-item'; // Usar mismo estilo que checkbox
         label.innerHTML = `
-            <input type="radio" name="option" value="${index}" style="margin-right: 0.5rem;">
-            ${option}
+            <input type="radio" name="option" value="${index}">
+            <span>${option}</span>
         `;
-        label.addEventListener('click', () => {
+        const radio = label.querySelector('input');
+        radio.addEventListener('change', () => {
             userAnswer = index;
+            console.log('Radio answer:', userAnswer);
         });
         div.appendChild(label);
     });
@@ -140,7 +154,7 @@ function renderMatching(question, container) {
     instruction.style.fontStyle = 'italic';
     instruction.style.color = '#666';
     instruction.style.marginBottom = '1rem';
-    instruction.textContent = '(Haz clic en un concepto de la izquierda, luego en "Enlazar" junto a su definición correcta en la derecha)';
+    instruction.textContent = '(Haz clic en un concepto de la izquierda, luego en su definición correcta en la derecha)';
     container.appendChild(instruction);
     
     const div = document.createElement('div');
@@ -148,7 +162,7 @@ function renderMatching(question, container) {
 
     // Inicializar userAnswer como objeto vacío
     userAnswer = {};
-
+    
     // Columna izquierda
     const leftDiv = document.createElement('div');
     leftDiv.className = 'matching-column';
@@ -157,7 +171,7 @@ function renderMatching(question, container) {
         const itemDiv = document.createElement('div');
         itemDiv.className = 'matching-item';
         itemDiv.textContent = item;
-        itemDiv.dataset.leftIndex = index; // Guardar índice
+        itemDiv.dataset.leftIndex = index;
         itemDiv.addEventListener('click', () => {
             document.querySelectorAll('.matching-item').forEach(el => el.classList.remove('selected'));
             itemDiv.classList.add('selected');
@@ -175,32 +189,65 @@ function renderMatching(question, container) {
         const itemDiv = document.createElement('div');
         itemDiv.className = 'matching-right-item';
         itemDiv.innerHTML = item;
-        itemDiv.dataset.rightIndex = index; // Guardar índice
+        itemDiv.dataset.rightIndex = index;
         
-        const enlazarBtn = document.createElement('button');
-        enlazarBtn.className = 'enlazar-btn';
-        enlazarBtn.textContent = 'Enlazar';
-        enlazarBtn.addEventListener('click', () => {
+        // Enlazar directamente al hacer clic en el recuadro
+        itemDiv.addEventListener('click', () => {
             if (selectedLeftIndex === null) {
                 alert('Selecciona un concepto primero');
                 return;
             }
+            
+            // Si este concepto ya tenía una definición asignada, desmarcarla
+            const previousRightIndex = userAnswer[selectedLeftIndex];
+            if (previousRightIndex !== undefined) {
+                const previousRightItem = document.querySelector(`.matching-right-item[data-right-index="${previousRightIndex}"]`);
+                if (previousRightItem) {
+                    previousRightItem.classList.remove('matched');
+                    previousRightItem.style.backgroundColor = '';
+                    previousRightItem.style.borderColor = '';
+                    previousRightItem.style.color = '';
+                }
+            }
+            
+            // Verificar si otro concepto tenía esta definición, quitarle el color
+            const existingLeftForThisRight = Object.entries(userAnswer).find(([leftIdx, rightIdx]) => rightIdx === index);
+            if (existingLeftForThisRight) {
+                const existingLeftIdx = parseInt(existingLeftForThisRight[0]);
+                // Quitar color del concepto izquierdo anterior
+                const existingLeftItem = document.querySelector(`.matching-item[data-left-index="${existingLeftIdx}"]`);
+                if (existingLeftItem) {
+                    existingLeftItem.style.backgroundColor = '';
+                    existingLeftItem.style.color = '';
+                }
+                // Eliminar el emparejamiento anterior
+                delete userAnswer[existingLeftIdx];
+            }
+            
+            // Color fijo basado en el índice del concepto de la izquierda
+            const assignedColor = matchingColors[selectedLeftIndex % matchingColors.length];
+            
             // Guardar el emparejamiento
             userAnswer[selectedLeftIndex] = index;
-            console.log('Matching answer:', userAnswer); // Debug
-            itemDiv.classList.add('matched');
+            console.log('Matching answer:', userAnswer);
             
-            // Mostrar indicador visual en el concepto
+            // Aplicar color a la definición
+            itemDiv.classList.add('matched');
+            itemDiv.style.backgroundColor = assignedColor;
+            itemDiv.style.borderColor = assignedColor;
+            itemDiv.style.color = 'white';
+            
+            // Aplicar el mismo color al concepto de la izquierda
             const leftItem = document.querySelector(`.matching-item[data-left-index="${selectedLeftIndex}"]`);
             if (leftItem) {
-                leftItem.style.backgroundColor = '#4CAF50';
+                leftItem.style.backgroundColor = assignedColor;
                 leftItem.style.color = 'white';
             }
             
             document.querySelectorAll('.matching-item').forEach(el => el.classList.remove('selected'));
             selectedLeftIndex = null;
         });
-        itemDiv.appendChild(enlazarBtn);
+        
         rightDiv.appendChild(itemDiv);
     });
     div.appendChild(rightDiv);
@@ -222,17 +269,23 @@ function restoreAnswer(type, savedAnswer) {
         userAnswer = savedAnswer;
     } else if (type === 'matching') {
         userAnswer = savedAnswer;
-        // Marcar los emparejamientos restaurados
+        // Marcar los emparejamientos restaurados con colores fijos basados en el índice izquierdo
         Object.entries(savedAnswer).forEach(([leftIdx, rightIdx]) => {
-            const rightItems = document.querySelectorAll('.matching-right-item');
-            if (rightItems[rightIdx]) {
-                rightItems[rightIdx].classList.add('matched');
+            // Color fijo basado en el índice del concepto de la izquierda
+            const color = matchingColors[parseInt(leftIdx) % matchingColors.length];
+            
+            const rightItem = document.querySelector(`.matching-right-item[data-right-index="${rightIdx}"]`);
+            if (rightItem) {
+                rightItem.classList.add('matched');
+                rightItem.style.backgroundColor = color;
+                rightItem.style.borderColor = color;
+                rightItem.style.color = 'white';
             }
             
-            // Marcar el concepto de izquierda también
+            // Marcar el concepto de izquierda también con el mismo color
             const leftItem = document.querySelector(`.matching-item[data-left-index="${leftIdx}"]`);
             if (leftItem) {
-                leftItem.style.backgroundColor = '#4CAF50';
+                leftItem.style.backgroundColor = color;
                 leftItem.style.color = 'white';
             }
         });
@@ -343,7 +396,10 @@ function showFeedback(question, isCorrect = null) {
         feedbackContainer.className = isCorrect ? 'feedback correct' : 'feedback incorrect';
         feedbackText.textContent = isCorrect ? '✅ Correcto' : '❌ Incorrecto';
     }
-    explanationText.textContent = question.explanation || '';
+    
+    // Convertir \n a <br> para mostrar saltos de línea
+    const explanation = question.explanation || '';
+    explanationText.innerHTML = explanation.replace(/\n/g, '<br>');
 }
 
 function exitQuiz() {
