@@ -1775,19 +1775,19 @@ questions_real = [
         "question": "Match the security term to the appropriate description. (Not all options are used.)",
         "image": None,
         "left_items": [
+            "a weakness in the design of a system that can be exploited by a threat",
+            "a mechanism that takes advantage of a vulnerability",
+            "the network equipment and confidential data owned by the organization",
+            "a potential danger to the data and network functionality of a company",
+            "the counter-measure to reduce the severity of a potential threat"
+        ],
+        "right_items": [
             "vulnerability",
             "exploit",
             "assets",
             "threat",
             "mitigation",
             "risk"
-        ],
-        "right_items": [
-            "a weakness in the design of a system that can be exploited by a threat",
-            "a mechanism that takes advantage of a vulnerability",
-            "the network equipment and confidential data owned by the organization",
-            "a potential danger to the data and network functionality of a company",
-            "the counter-measure to reduce the severity of a potential threat"
         ],
         "correct": [0, 1, 2, 3, 4],
         "explanation": "Place the options in the following order:\n- vulnerability: a weakness in the design of a system that can be exploited by a threat\n- exploit: a mechanism that takes advantage of a vulnerability\n- assets: the network equipment and confidential data owned by the organization\n- threat: a potential danger to the data and network functionality of a company\n- mitigation: the counter-measure to reduce the severity of a potential threat"
