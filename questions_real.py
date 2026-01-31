@@ -655,7 +655,7 @@ questions_real = [
     {
         "id": 1044,
         "type": "radio",
-        "question": "How does a firewall handle traffic when it is originating from the private network and traveling to the DMZ network? (SOSPECHOSA)",
+        "question": "How does a firewall handle traffic when it is originating from the private network and traveling to the DMZ network?",
         "image": None,
         "options": [
             "The traffic is selectively denied based on service requirements.",
@@ -1613,7 +1613,7 @@ questions_real = [
     {
         "id": 1110,
         "type": "radio",
-        "question": "A recently created ACL is not working as expected. The admin determined that the ACL had been applied inbound on the interface and that was the incorrect direction. How should the admin fix this issue?(SOSPECHOSO)",
+        "question": "A recently created ACL is not working as expected. The admin determined that the ACL had been applied inbound on the interface and that was the incorrect direction. How should the admin fix this issue?",
         "image": None,
         "options": [
             "Delete the original ACL and create a new ACL, applying it outbound on the interface.",

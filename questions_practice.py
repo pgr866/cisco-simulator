@@ -446,13 +446,14 @@ questions_practice = [
         "id": 33,
         "type": "matching",
         "question": "Match the network security device type with the description.",
-        "left_items": ["Packet filter firewall", "IPS", "Application Gateway"],
+        "left_items": ["Packet filter firewall", "IPS", "Application Gateway", "Stateful firewall"],
         "right_items": [
             "enforces an access control policy based on packet content",
             "uses signatures to detect patterns in network traffic",
-            "filters traffic on Layer 7 information"
+            "filters traffic on Layer 7 information",
+            "filters traffic based on defined rules as well as connection context"
         ],
-        "correct": [0, 1, 2],
+        "correct": [0, 1, 2, 3],
         "explanation": "Each network security device type has specific characteristics. Packet filter firewalls enforce access control based on packet content. IPS systems use signatures to detect attack patterns. Application gateways filter traffic at Layer 7."
     },
     {
@@ -695,7 +696,7 @@ questions_practice = [
             "used to assess if network devices are compliant with network security policies"
         ],
         "correct": [0, 1, 2],
-        "explanation": "Each security testing tool has a specific function. Nmap is used for port scanning, Nessus for vulnerability scanning, and Tripwire for compliance assessment."
+        "explanation": "Each security testing tool has a specific function. Nmap is used for port scanning, Nessus for vulnerability scanning, and Tripwire for compliance assessment. (EN CISCO ESTA MAL: Nmap y Tripwire estan al reves)"
     },
     {
         "id": 52,
