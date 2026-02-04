@@ -55,6 +55,9 @@ function displayCurrentQuestion() {
 }
 
 function renderQuestion(question) {
+    const optionsContainer = document.getElementById('options-container');
+    optionsContainer.style.pointerEvents = 'auto';
+    document.getElementById('next-btn').onclick = submitAnswer;
     document.getElementById('question-text').textContent = question.question;
     document.getElementById('options-container').innerHTML = '';
     document.getElementById('feedback-container').style.display = 'none';
@@ -341,9 +344,8 @@ function saveAnswer() {
 }
 
 function submitAnswer() {
-    // Si ya fue respondida, no permitir cambiar
     if (answered[currentQuestionIndex]) {
-        alert('Esta pregunta ya ha sido respondida. Usa los botones de navegación para continuar.');
+        alert('Esta pregunta ya ha sido respondida.');
         return;
     }
 
@@ -357,9 +359,7 @@ function submitAnswer() {
 
     fetch('/check_answer', {
         method: 'POST',
-        headers: {
-            'Content-Type': 'application/json',
-        },
+        headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ 
             selected: userAnswer,
             type: currentQuestion.type 
@@ -367,9 +367,39 @@ function submitAnswer() {
     })
     .then(response => response.json())
     .then(data => {
+        // --- NUEVA LÓGICA DE MARCADO VISUAL ---
+        const optionsContainer = document.getElementById('options-container');
+        
+        // Bloquear clics para que no cambie la respuesta
+        optionsContainer.style.pointerEvents = 'none';
+
+        if (currentQuestion.type === 'radio' || currentQuestion.type === 'checkbox') {
+            const items = optionsContainer.querySelectorAll('.checkbox-item');
+            
+            // 1. Marcar las correctas en VERDE
+            data.correctOptions.forEach(idx => {
+                if (items[idx]) items[idx].classList.add('correct-highlight');
+            });
+
+            // 2. Si el usuario falló, marcar su error en ROJO (opcional)
+            if (!data.correct) {
+                const userSelection = Array.isArray(userAnswer) ? userAnswer : [userAnswer];
+                userSelection.forEach(idx => {
+                    if (!data.correctOptions.includes(idx)) {
+                        if (items[idx]) items[idx].classList.add('wrong-highlight');
+                    }
+                });
+            }
+        } 
+        else if (currentQuestion.type === 'matching') {
+            // En matching el feedback visual es la explicación, 
+            // pero podrías añadir bordes verdes a los items aquí.
+        }
+
+        // Mostrar el feedback de texto y explicación
         showFeedback(currentQuestion, data.correct);
         
-        // Obtener contadores actuales del servidor
+        // Actualizar contadores
         fetch('/quiz_info')
             .then(res => res.json())
             .then(info => {
@@ -377,13 +407,12 @@ function submitAnswer() {
                 document.getElementById('incorrect-count').textContent = info.incorrect_answers;
             });
 
-        // Ocultar botón después de responder
-        document.getElementById('next-btn').style.display = 'none';
+        // Cambiar botón a "Siguiente" para agilizar
+        const nextBtn = document.getElementById('next-btn');
+        nextBtn.textContent = 'Siguiente Pregunta';
+        nextBtn.onclick = nextQuestion;
     })
-    .catch(error => {
-        console.error('Error:', error);
-        alert('Error al verificar respuesta');
-    });
+    .catch(error => console.error('Error:', error));
 }
 
 function showFeedback(question, isCorrect = null) {

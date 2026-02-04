@@ -295,6 +295,9 @@ def check_answer():
     print(f"Failed questions count: {len(failed_questions)}")
     print(f"Failed question IDs: {failed_questions}")
 
+    if not isinstance(correct_options, list):
+        correct_options = [correct_options]
+
     return jsonify({
         "correct": is_correct,
         "correctOptions": correct_options,

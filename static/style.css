@@ -215,3 +215,12 @@ h1 {
         grid-template-columns: 1fr;
     }
 }
+
+.correct-highlight {
+    background-color: #d4edda !important;
+    border: 2px solid #28a745 !important;
+}
+.wrong-highlight {
+    background-color: #f8d7da !important;
+    border: 2px solid #dc3545 !important;
+}
