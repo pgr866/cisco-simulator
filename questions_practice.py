@@ -691,9 +691,9 @@ questions_practice = [
         "question": "Match the network security testing tool with the correct function.",
         "left_items": ["Nmap", "Nessus", "Tripwire"],
         "right_items": [
-            "used for Layer 3 port scanning",
+            "used to assess if network devices are compliant with network security policies",
             "used to scan systems for software vulnerabilities",
-            "used to assess if network devices are compliant with network security policies"
+            "used for Layer 3 port scanning"
         ],
         "correct": [0, 1, 2],
         "explanation": "Each security testing tool has a specific function. Nmap is used for port scanning, Nessus for vulnerability scanning, and Tripwire for compliance assessment. (EN CISCO ESTA MAL: Nmap y Tripwire estan al reves)"
